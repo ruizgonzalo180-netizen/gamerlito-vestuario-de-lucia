@@ -1084,7 +1084,7 @@
     return '<h2>Report an issue</h2><form class="gh-report"><label>Category<select name="kind"><option>Playback</option><option>Controls</option><option>Interface</option></select></label><label>What happened?<textarea name="note" required maxlength="300" placeholder="Describe the issue"></textarea></label><p>Notes are saved on this device.</p><button type="submit" class="gh-action gh-primary">Save note</button></form>'+recent;
   }
   function help() {
-    const rows=[["Move camera","Joystick / W A S D"],["Jump camera","Jump / Space"],["Next scene action","Action prompt / E"],["Speed up playback","Hold runner / Shift"],["Open chat","Chat / slash"],["Open or close menu","Roblox / Esc"]];
+    const rows=[["Change clothing","Swatches / ← →"],["Wear clothing","Ponerse / Enter or E"],["Replay animation","↻ / R"],["Browse sections","Secciones / Esc"],["Open chat","Chat / slash"],["Open Roblox menu","Roblox logo"]];
     return '<h2>Controls</h2>'+rows.map(([name,key])=>'<div class="gh-row"><span>'+name+'</span><span class="gh-key">'+key+'</span></div>').join("");
   }
   function renderMenu() {

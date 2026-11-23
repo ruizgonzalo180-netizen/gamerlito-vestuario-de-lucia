@@ -155,14 +155,21 @@ function createWardrobe({video, play, reveal, blocked}) {
       }
     }
     variants.hidden=filmed(group).length<2;
-    if(!variants.hidden && !portrait) {
-      variants.style.setProperty('left','calc(var(--left) + var(--w)*'+(.022+Math.min(group.options.length,6)*.06255)+')');
-    }
+    variants.style.setProperty('--wr-variant-x',.022+Math.min(group.options.length,6)*.06255);
     const j=button('jacket');
     j.hidden=!item.jacketWindows?.length;
     j.textContent=jacket?'Quitar chaqueta':'Chaqueta';
     j.setAttribute('aria-label',jacket?'Quitar chaqueta':'Mostrar chaqueta'); j.setAttribute('aria-pressed',String(jacket));
     for(const b of picker.children) b.setAttribute('aria-current',String(b.dataset.category===group.id));
+    showSaved();
+  }
+  function showSaved() {
+    const saved=records[group.id]?.saved?.includes(item.index) || false;
+    const b=button('save');
+    b.textContent=saved?'Guardada':'Guardar';
+    b.setAttribute('aria-pressed',String(saved));
+    b.setAttribute('aria-label',saved?'Quitar prenda guardada':'Guardar prenda');
+    b.title=saved?'Quitar prenda guardada':'Guardar prenda';
   }
   function closeMenu(resumeMotion=true) {
     picker.hidden=true; button('categories').setAttribute('aria-expanded','false');
@@ -204,8 +211,10 @@ function createWardrobe({video, play, reveal, blocked}) {
   }
   function save() {
     const entry=records[group.id] || (records[group.id]={});
-    entry.saved=Array.from(new Set([...(entry.saved||[]),item.index]));
-    persist(); toast('Guardada · '+item.name);
+    const saved=new Set(entry.saved || []);
+    if(saved.has(item.index)) saved.delete(item.index); else saved.add(item.index);
+    entry.saved=[...saved]; persist(); showSaved();
+    toast((saved.has(item.index)?'Guardada · ':'Quitada de guardadas · ')+item.name);
   }
   function beginAisle() {
     closeMenu(false); aisle=true; group=catalog[0]; item=filmed(group)[0];

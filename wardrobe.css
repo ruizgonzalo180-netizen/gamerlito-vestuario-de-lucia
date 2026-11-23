@@ -21,7 +21,7 @@
 }
 #wardrobe .wr-replay { width:clamp(36px,5.85vmin,49px); padding:0; font:25px/1 Arial,sans-serif; }
 #wardrobe .wr-pill:hover, #wardrobe .wr-pill[aria-expanded=true], #wardrobe .wr-variants>button:hover { background:rgba(50,51,55,.94); }
-#game-view[data-phase=playing] #game-hud .gh-toolbar { left:max(14.5%,env(safe-area-inset-left)); }
+#game-view[data-phase=playing] #game-hud .gh-toolbar { left:max(calc(var(--wr-left,0px) + var(--wr-w,100vw)*.20),env(safe-area-inset-left)); }
 #game-view:has(#wardrobe:not([hidden])) #game-hud :is(.gh-stick,.gh-jump,.gh-sprint,.gh-scene-action,.gh-native-prompts,.gh-prompt-tray) { display:none; }
 #game-view:has(.gh-modal-open) #wardrobe { visibility:hidden; }
 .wr-picker {
@@ -40,7 +40,7 @@
 #wr-options button { position:relative; display:block; background:transparent; pointer-events:auto; width:calc(var(--w)*.06255); padding:0; }
 #wr-options button:hover:not(:disabled), #wr-options button:focus-visible { box-shadow:inset 0 0 0 2px #fff; }
 #wr-options button:disabled { background:repeating-linear-gradient(135deg,transparent,transparent 5px,#14141666 5px,#14141666 7px); }
-.wr-variants { position:absolute; display:flex; gap:3px; align-items:center; left:calc(var(--left) + var(--w)*.4); top:calc(var(--top) + var(--h)*.843); transform:translateY(-50%); pointer-events:auto; }
+.wr-variants { position:absolute; display:flex; gap:3px; align-items:center; left:calc(var(--left) + var(--w)*var(--wr-variant-x,.4)); top:calc(var(--top) + var(--h)*.843); transform:translateY(-50%); pointer-events:auto; }
 #wardrobe .wr-variants button { font-size:22px; line-height:1; min-width:32px; padding:0 6px; height:clamp(30px,4.2vh,40px); }
 .wr-bottom { position:absolute; bottom:calc(100% - var(--top) - var(--h)*.997); right:calc(100% - var(--left) - var(--w)*.997); height:max(28px,calc(var(--h)*.075)); display:flex; align-items:stretch; pointer-events:auto; }
 #wardrobe .wr-bottom button { color:transparent; background:transparent; border-radius:3px; }
@@ -51,9 +51,20 @@
 #wardrobe [data-wardrobe=back] { width:calc(var(--w)*.056); }
 .wr-status { position:absolute; bottom:calc(max(2.4%,env(safe-area-inset-bottom)) + 30px); left:50%; transform:translateX(-50%); background:#131419e8; padding:8px 13px; border-radius:7px; text-align:center; pointer-events:none; width:max-content; max-width:80%; }
 .wr-status:empty { display:none; }
+#wardrobe [data-wardrobe=save][aria-pressed=true] { position:relative; }
+@media (min-aspect-ratio:6/5) and (min-width:1001px) {
+  #wardrobe [data-wardrobe=save][aria-pressed=true]::before {
+    content:'✓'; position:absolute; right:0; top:-4px; border-radius:100%;
+    display:grid; place-items:center; width:17px; height:17px; color:#202321; background:#f2f8ed; font:700 12px/1 Arial;
+  }
+}
 #wardrobe[data-mode=entry] :is(#wr-options,.wr-variants,.wr-bottom,.wr-mobile-item,.wr-replay), #wardrobe:not([data-mode=entry]) .wr-enter {display:none;}
 @media (min-aspect-ratio:6/5) and (max-width:1000px) {
-  .wr-bottom {height:auto; bottom:max(2px,env(safe-area-inset-bottom)); right:max(2px,env(safe-area-inset-right)); background:#17191def; border-radius:20px; }
+  .wr-bottom {
+    bottom:calc(100% - var(--top) - var(--h)); right:calc(100% - var(--left) - var(--w));
+    min-width:calc(var(--w)*.35); height:max(30px,calc(var(--h)*.067));
+    align-items:center; justify-content:flex-end; border-radius:8px 0 0 0; background:#17191d;
+  }
   #wardrobe .wr-bottom button { width:auto; min-height:30px; padding:0 9px; color:white; font-size:12px; }
 }
 @media (max-aspect-ratio:6/5) {
@@ -64,6 +75,7 @@
   .wr-enter { left:20%; top:40%; width:64%; height:24%; }
   .wr-mobile-item { position:absolute; left:0; right:0; bottom:0; height:calc(var(--panel,124px) + max(45px,env(safe-area-inset-bottom))); background:linear-gradient(transparent,#101013 24%); display:block; }
   #wr-info { position:absolute; left:max(8px,env(safe-area-inset-left)); bottom:max(43px,env(safe-area-inset-bottom)); width:var(--info-w,88%); height:var(--panel,124px); }
+  #wr-info { mask-image:linear-gradient(to bottom,transparent,#000 5%,#000 99%,transparent); }
   #wr-options { top:auto; bottom:calc(max(43px,env(safe-area-inset-bottom)) + var(--chip-bottom,9px)); left:max(8px,env(safe-area-inset-left)); height:var(--chip-size,39px); }
   #wr-options button { width:var(--chip-step,41px); }
   .wr-variants { left:auto; right:8px; top:auto; bottom:calc(max(43px,env(safe-area-inset-bottom)) + var(--chip-bottom,9px)); transform:none; flex-direction:column; }
